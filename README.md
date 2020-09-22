@@ -37,7 +37,7 @@ This will allow running unsigned scripts and signed scripts from the Internet.
 
 ## How to Contribute
 
-To become a contributor, please follow our [contributing guide](CONTRIBUTING.md).
+To become a contributor, please follow our [contributing guide](Contributing.md).
 
 ## License
 
