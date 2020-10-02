@@ -1,4 +1,4 @@
-# Quick scan and validate all softwares in the system and figure out whitelisted according to the organization  compliance software list.
+# A Quick scan and validate all softwares in the system and figure out whitelisted according to the organization  compliance software list.
 
 ## Features
 
