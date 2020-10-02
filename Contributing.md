@@ -6,8 +6,8 @@ Contributing.md
 
 ## Getting Started
 
-- Fork the repository on GitHub
-- If you find any bug in the existing code, please create a pull request as mentioned in Contribution Flow
+- Fork the repository on GitHub.
+- If you find any bug in the existing code, please create a pull request as mentioned in Contribution Flow.
 
 ## Reporting A new Update 
 
