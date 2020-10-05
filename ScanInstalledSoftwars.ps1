@@ -25,14 +25,22 @@
     (default is "L"): : M
     Please Enter WhiteList Software CSV Name: WhiteListSoftware.csv
     Please Enter your CSV Export Path: Result.csv
-    Please Enter SMTP From Email Address: example@example.com
-    Please Enter SMTP User Name: example@example.com
-    Please Enter SMTP Password: 12345
+     Please Enter SMTP From Email Address: example@example.com
+     Please Enter SMTP User Name: example@example.com
+     Please Enter SMTP Password: 12345
+    Please Choose option
+    [D] Default email template 
+    [C] Customize email template
+        
+    (default is "D"): C
+     Please enter email subject : Software Scan Result for  - XXX-PC
+     Please enter email body content : Please Find Report in the attachment
+    
 #>
 
 
 param ([string]$Choice, [string]$WhiteListSoftwareCSV, [string]$ExportCSVPath, [string]$SMTPUserName, [string]$SMTPPassword
-, [string]$SMTPFromEmailAddress, [string]$SMTPToEmailAddress)
+, [string]$SMTPFromEmailAddress, [string]$SMTPToEmailAddress, [string]$ChoiceEmailTemplate, [string]$EmailSubject, [string]$EmailBody)
 
 function Get-Data { }
 
@@ -67,6 +75,22 @@ if ($Choice.ToLower() -eq "m"){
 
     $SMTPFromEmailAddress = Read-Host -Prompt ' Please Enter SMTP From Email Address';
     $SMTPToEmailAddress = Read-Host -Prompt ' Please Enter SMTP To Email Address';
+
+    $ChoiceEmailTemplate = Read-Host -Prompt 'Please Choose option
+[D] Default email template 
+[C] Customize email template
+    
+(default is "D"): ';
+    
+    # default content for email template
+    $SystemName = $(Get-WmiObject Win32_Computersystem).name;
+    $EmailSubject = "Software Scan Result for  - $($SystemName)";
+    $EmailBody = "Please Find Report in the attachment";
+
+    if ($ChoiceEmailTemplate.ToLower() -eq "c") {
+      $EmailSubject = Read-Host -Prompt ' Please enter email subject';
+      $EmailBody = Read-Host -Prompt ' Please enter email body content';
+    }
 
 }
 
@@ -129,13 +153,13 @@ function ValidateEmail{
 	-eq $address -and $address -ne $null
 }
 
- function Send-ToEmail([string]$email, [string]$attachmentpath,[string]$SystemName){
+function Send-ToEmail([string]$email, [string]$attachmentpath) {
 
     $message = new-object Net.Mail.MailMessage;
     $message.From = $SMTPFromEmailAddress;
     $message.To.Add($email);
-    $message.Subject ="Software Scane Result for  - $($SystemName)";
-    $message.Body = "Please Find Report in the attachment";
+    $message.Subject = $EmailSubject;
+    $message.Body = $EmailBody;
     $attachment = New-Object Net.Mail.Attachment($attachmentpath);
     $message.Attachments.Add($attachment);
 
@@ -150,6 +174,6 @@ function ValidateEmail{
 
 if ($Choice.ToLower() -eq "m"){
 
-Send-ToEmail  -email $SMTPToEmailAddress -attachmentpath $ExportCSVPath -systemname $(Get-WmiObject Win32_Computersystem).name ;
+  Send-ToEmail  -email $SMTPToEmailAddress -attachmentpath $ExportCSVPath;
 
 }
