@@ -39,7 +39,7 @@
 #>
 
 
-param ([string]$Choice, [string]$WhiteListSoftwareCSV, [string]$ExportCSVPath, [string]$SMTPUserName, [string]$SMTPPassword
+param ([string]$Choice, [string]$WhiteListSoftwareCSV, [string]$ExportCSVPath, [string]$SMTPUserName, [string]$SMTPPassword, [string]$SMTPHost, [string]$SMTPPort
 , [string]$SMTPFromEmailAddress, [string]$SMTPToEmailAddress, [string]$ChoiceEmailTemplate, [string]$EmailSubject, [string]$EmailBody)
 
 function Get-Data { }
@@ -57,8 +57,11 @@ $Choice = Read-Host -Prompt 'Please Choose option
 
 (default is "L"): '
 
+
 $SMTPUserName = "";
 $SMTPPassword = "";
+$SMTPHost = "smtp.gmail.com";
+$SMTPPort = "587";
 
 $WhiteListSoftwareCSV = Read-Host -Prompt 'Please Enter WhiteList Software CSV Name'
 
@@ -75,6 +78,9 @@ if ($Choice.ToLower() -eq "m"){
 
     $SMTPFromEmailAddress = Read-Host -Prompt ' Please Enter SMTP From Email Address';
     $SMTPToEmailAddress = Read-Host -Prompt ' Please Enter SMTP To Email Address';
+
+    $SMTPHost = Read-Host -Prompt ' Please Enter SMTP Host';
+    $SMTPPort = Read-Host -Prompt ' Please Enter SMTP Port';
 
     $ChoiceEmailTemplate = Read-Host -Prompt 'Please Choose option
 [D] Default email template 
@@ -154,7 +160,6 @@ function ValidateEmail{
 }
 
 function Send-ToEmail([string]$email, [string]$attachmentpath) {
-
     $message = new-object Net.Mail.MailMessage;
     $message.From = $SMTPFromEmailAddress;
     $message.To.Add($email);
@@ -163,7 +168,7 @@ function Send-ToEmail([string]$email, [string]$attachmentpath) {
     $attachment = New-Object Net.Mail.Attachment($attachmentpath);
     $message.Attachments.Add($attachment);
 
-    $smtp = new-object Net.Mail.SmtpClient("smtp.gmail.com", "587");
+    $smtp = new-object Net.Mail.SmtpClient($SMTPHost, $SMTPPort);
     $smtp.EnableSSL = $true;
     $smtp.Credentials = New-Object System.Net.NetworkCredential($SMTPUserName, $SMTPPassword);
     $smtp.send($message);
