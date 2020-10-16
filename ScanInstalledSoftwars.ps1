@@ -73,14 +73,26 @@ if ($Choice -eq ""){
 
 if ($Choice.ToLower() -eq "m"){
 
+    $ChoiceSMTPProvider = Read-Host -Prompt 'Default SMTP Provider is Gmail.
+    [D] Do You want to use default SMTP Provider  
+    [O] Do You want to use other SMTP Provider 
+
+    (default is "D"): ';
+
+ 	if ($ChoiceSMTPProvider.ToLower() -eq "o") {
+	
+    	$SMTPHost = Read-Host -Prompt ' Please Enter SMTP Host';
+    	$SMTPPort = Read-Host -Prompt ' Please Enter SMTP Port';
+    
+	}
+	
     $SMTPUserName =  Read-Host -Prompt ' Please Enter SMTP User Name';
     $SMTPPassword = Read-Host -Prompt ' Please Enter SMTP Password';
 
     $SMTPFromEmailAddress = Read-Host -Prompt ' Please Enter SMTP From Email Address';
     $SMTPToEmailAddress = Read-Host -Prompt ' Please Enter SMTP To Email Address';
+    
 
-    $SMTPHost = Read-Host -Prompt ' Please Enter SMTP Host';
-    $SMTPPort = Read-Host -Prompt ' Please Enter SMTP Port';
 
     $ChoiceEmailTemplate = Read-Host -Prompt 'Please Choose option
 [D] Default email template 
