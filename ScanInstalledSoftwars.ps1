@@ -113,6 +113,7 @@ if ($Choice.ToLower() -eq "m"){
 }
 
 $Software = @()
+$Version = @()
 $Export = @()
 
 
@@ -126,24 +127,52 @@ Import-Csv $ScriptDir\$WhiteListSoftwareCSV |`
     ForEach-Object {
         $Software += $_.Software
 
-        write-host $_.Software
+        if($_Version -eq $null) {
+          $Version += "ND"
+        } else {
+          $Version += $_.Version
+        }
+
+        write-host $_.Software $_.Version
    }
 
 
 $Result= Get-ItemProperty  HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate
-Write-Host " ============= .:: Software WhiteListed ::. ============= "
+
+
+Write-Host " ============= .:: Software WhiteListed with compliant version ::. ============= "
 
 foreach($R in $Result){
 
-    if ($Software -contains $R.DisplayName){
-    
-        if ($Choice.ToLower()  -eq "l"){
-            Write-Host "Software Name: " $R.DisplayName
-        }
+  $i = 0
+  foreach ($el in $Software) { 
+    if ($el -eq $R.DisplayName) {
 
-            $Where = [array]::IndexOf($Software, $R.DisplayName)
+      if (($Version[$i] -eq "ND") -or ($Version[$i] -eq $R.DisplayVersion)) {
+        Write-Host "Software Name: "$R.DisplayName "v:" $R.DisplayVersion
+      }
+      break
+    } 
+    ++$i
+  }
+}
 
-        }
+Write-Host " ============= .:: Software WhiteListed with uncompliant version ::. ============= "
+
+foreach($R in $Result){
+
+  $i = 0
+  foreach ($el in $Software) { 
+    if ($el -eq $R.DisplayName) {
+
+      if (($Version[$i] -ne "ND") -and ($Version[$i] -ne $R.DisplayVersion)) {
+        Write-Host "Software Name: "$R.DisplayName "v:" $R.DisplayVersion
+        $Export += $R.DisplayName
+      }
+      break
+    } 
+    ++$i
+  }
 }
 
 
@@ -151,14 +180,15 @@ Write-Host " ============= .:: Software Not WhiteListed ::. ============= "
 
 foreach($R in $Result){
 
-    
+    if (-Not ($Software -contains $R.DisplayName)){
         if ($Choice.ToLower() -eq "l"){
 
             Write-Host "Software Name: " $R.DisplayName
         
         }
 
-         $Export += $R.DisplayName
+        $Export += $R.DisplayName
+    }
 }
 
 
