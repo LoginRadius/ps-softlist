@@ -8,32 +8,30 @@
 
 ## Quickstart
 
-Download the power script folder 
-Unzip the downloaded folder
-Locate the bat file ` ScanInstallSoftware.bat`
-Open the bat file and follow the instructions
+- Download the power script folder 
+- Unzip the downloaded folder
+- Locate the bat file ` ScanInstallSoftware.bat`
+- Open the bat file and follow the instructions
 
-### Use full Commands 
-Follow the commands listed below.
+## Use full Commands 
+Follow the commands listed below. It will show you all the parameters details with examples
 
 ```powershell
 get-help .\ScanInstalledSoftwars.ps1 -full
-```
+``` 
 
-This command will show all parameters details with examples 
-
-### Note 
+## Note 
 You need to enable unsigned scripts before executing this powershell script 
 
 Start Windows PowerShell with the "Run as Administrator" option. Only Administrators  can change the execution policy
 Enable running unsigned scripts by entering
 
+This will allow running unsigned scripts and signed scripts from the Internet.
+
 ```powershell
 Set-Executionpolicy RemoteSigned
 
 ```
-
-This will allow running unsigned scripts and signed scripts from the Internet.
 
 ## How to Contribute
 
