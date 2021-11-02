@@ -41,4 +41,4 @@ To become a contributor, please follow our [contributing guide](Contributing.md)
 
 ## License
 
-[MIT](LICENSE)
+For more information on licensing, please refer to [License](LICENSE)
